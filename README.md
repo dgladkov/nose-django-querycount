@@ -23,9 +23,17 @@ like so:
 
     NOSE_ARGS = ['--with-querycount']
     NOSE_PLUGINS = [
-        'nosequerycount.DjangoQueryCountPlugin',
+        'nosequerycount.plugin.DjangoQueryCountPlugin',
     ]
 
+Options
+------------
+
+    $ nosetests --with-querycount --querycount-threshold=15
+
+Provides query count threshold for each test. If test run exceeds 15 queries,
+query count number will be red. Works only for terminal output and only if
+your terminal application supports coloring.
 
 Warning
 ------------
