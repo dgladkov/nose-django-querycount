@@ -1,5 +1,7 @@
+import codecs
 from collections import defaultdict
 from django.conf import settings
+from nosequerycount.utils import ColoredString
 try:
     from nose.plugins import Plugin
 except ImportError:
@@ -33,12 +35,27 @@ class DjangoQueryCountPlugin(Plugin):
         for name in connections:
             self.data_columns[name] = len(name) + 2
 
+    def options(self, parser, env):
+        """
+        Add options to command line.
+        """
+        super(DjangoQueryCountPlugin, self).options(parser, env)
+        parser.add_option('--querycount-threshold', action='store',
+                          default=env.get('NOSE_QUERYCOUNT_THRESHOLD'),
+                          dest='threshold',
+                          help='Set query count threshold for each test'
+                          '[NOSE_QUERYCOUNT_THRESHOLD]')
+
     def configure(self, options, conf):
         # Save a reference to the `Config` to access its `stream` in case
         # setOutputStream isn't called.
         self.config = conf
         if Plugin is not object:
             super(DjangoQueryCountPlugin, self).configure(options, conf)
+        try:
+            self.threshold = int(options.threshold)
+        except ValueError:
+            self.threshold = 0
 
     def startTest(self, test):
         """
@@ -70,6 +87,8 @@ class DjangoQueryCountPlugin(Plugin):
         """
         total = 0
         output_stream = self.output_stream or self.config.stream
+        if str is not unicode:
+            output_stream = codecs.getwriter('utf-8')(output_stream)
         # column with calculation
         first_col_width = len(max(self.data.keys() or ['Tests'], key=len))
         total_width = first_col_width + sum(self.data_columns.values())
@@ -83,11 +102,16 @@ class DjangoQueryCountPlugin(Plugin):
         output_stream.write('-' * total_width)
         output_stream.write('\n')
 
-        for test, results in self.data.iteritems():
-            output_stream.write(test.ljust(first_col_width))
+        for test_name, results in self.data.iteritems():
+            output_stream.write(test_name.ljust(first_col_width))
+
             for name, count in results.iteritems():
-                output_stream.write(str(count).rjust(self.data_columns[name]))
+                result = str(count).rjust(self.data_columns[name])
+                if self.threshold and count > self.threshold:
+                    result = ColoredString(result, ColoredString.RED)
+                output_stream.write(result)
                 total += count
+
             output_stream.write('\n')
 
         output_stream.write('-' * total_width)
