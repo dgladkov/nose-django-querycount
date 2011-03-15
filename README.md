@@ -10,6 +10,10 @@ From the source repository:
 
     $ pip install git+git://github.com/dgladkov/nose-django-querycount.git
 
+From PyPI:
+
+    $ pip install nose-django-querycount
+
 Usage
 ------------
 
