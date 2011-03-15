@@ -8,7 +8,7 @@ class TestDisabledPlugin(TestPlugin):
     def test_is_plugin(self):
         self.assert_(isinstance(self.plugin, Plugin))
 
-    def test_name_is_achievements(self):
+    def test_name_is_querycount(self):
         self.assertEqual(self.plugin.name, 'querycount')
 
     def test_is_not_enabled_by_default(self):
