@@ -7,8 +7,8 @@ class TestColoredString(unittest.TestCase):
         'BLACK', 'RED', 'GREEN', 'YELLOW', 'BLUE', 'MAGENTA', 'CYAN', 'WHITE',
     )
 
-    def test_is_str_subclass(self):
-        self.assert_(issubclass(ColoredString, str))
+    def test_is_unicode_subclass(self):
+        self.assert_(issubclass(ColoredString, unicode))
 
     def test_class_properties(self):
         for c, n in zip(self.colors, range(8)):
