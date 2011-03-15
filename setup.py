@@ -9,7 +9,7 @@ import nose
 
 setup(
     name='nose-django-querycount',
-    version='0.1',
+    version='0.2',
     author="Dmitry Gladkov",
     author_email='dmitry.gladkov@gmail.com',
     url='https://github.com/dgladkov/nose-django-querycount',
