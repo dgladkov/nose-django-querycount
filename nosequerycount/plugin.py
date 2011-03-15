@@ -54,7 +54,7 @@ class DjangoQueryCountPlugin(Plugin):
             super(DjangoQueryCountPlugin, self).configure(options, conf)
         try:
             self.threshold = int(options.threshold)
-        except ValueError:
+        except (TypeError, ValueError):
             self.threshold = 0
 
     def startTest(self, test):
