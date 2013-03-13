@@ -15,7 +15,7 @@ if sys.argv[-1] == "publish":
 
 setup(
     name='nose-django-querycount',
-    version='0.2',
+    version='0.3',
     author="Dmitry Gladkov",
     author_email='dmitry.gladkov@gmail.com',
     url='https://github.com/dgladkov/nose-django-querycount',
